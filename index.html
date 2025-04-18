@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculateur de Volume Pénien</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f8;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1, h2, h3 {
+      text-align: center;
+    }
+    label, input {
+      display: block;
+      margin: 1rem 0 0.5rem;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 100%;
+    }
+    button {
+      padding: 0.7rem;
+      width: 100%;
+      font-size: 1rem;
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .result, .diplome, .stats, .echelle, .plaisir {
+      margin-top: 2rem;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .diplome {
+      border: 2px solid #4caf50;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+    .level {
+      flex: 1;
+      height: 30px;
+      margin: 0 2px;
+      text-align: center;
+      line-height: 30px;
+      color: white;
+      font-weight: bold;
+    }
+    .level1 { background-color: #7f0000; }
+    .level2 { background-color: #b71c1c; }
+    .level3 { background-color: #e53935; }
+    .level4 { background-color: #f57c00; }
+    .level5 { background-color: #43a047; }
+    .level6 { background-color: #1e88e5; }
+    .level7 { background-color: #6a1b9a; }
+  </style>
+</head>
+<body>
+  <h1>Calculateur de Volume Pénien</h1>
+
+  <p>📏 <strong>Conseils pour bien mesurer :</strong></p>
+  <ul>
+    <li>Utilisez un mètre ruban souple.</li>
+    <li>Mesurez la <strong>longueur</strong> en érection, du pubis à l'extrémité du gland.</li>
+    <li>Mesurez la <strong>circonférence</strong> à mi-longueur.</li>
+    <li>Réalisez les mesures dans un environnement calme, détendu.</li>
+  </ul>
+
+  <h2>Formulaire de calcul</h2>
+  <label for="prenom">Prénom</label>
+  <input type="text" id="prenom" placeholder="Ex: Alex" />
+
+  <label for="length">Longueur en érection (cm)</label>
+  <input type="number" id="length" step="0.1" min="0" />
+
+  <label for="girth">Circonférence en érection (cm)</label>
+  <input type="number" id="girth" step="0.1" min="0" />
+
+  <button onclick="calculateVolume()">Calculer</button>
+
+  <div class="result" id="result"></div>
+
+  <div class="echelle" id="echelle" style="display: none;">
+    <h3>🔢 Échelle d'appréciation (1 à 7)</h3>
+    <p><strong>5</strong> représente la moyenne mondiale (~165 cm³ de volume).<br>
+    Plus le score est élevé, plus le volume est au-dessus de la moyenne.</p>
+    <div class="bar">
+      <div class="level level1">1</div>
+      <div class="level level2">2</div>
+      <div class="level level3">3</div>
+      <div class="level level4">4</div>
+      <div class="level level5">5</div>
+      <div class="level level6">6</div>
+      <div class="level level7">7</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <h3>📊 Statistiques sur la taille des pénis</h3>
+    <ul>
+      <li>Taille moyenne mondiale en érection : <strong>13,12 à 14,5 cm</strong></li>
+      <li>Circonférence moyenne : <strong>11 à 12 cm</strong></li>
+      <li>Volume moyen estimé : <strong>165 cm³</strong></li>
+      <li>Moins de <strong>2 %</strong> des hommes dépassent 20 cm de longueur</li>
+      <li>Un volume supérieur à <strong>190 cm³</strong> est considéré comme "hors norme"</li>
+    </ul>
+  </div>
+
+  <div class="plaisir">
+    <h3>💖 Le plaisir féminin : ce que disent les études</h3>
+    <ul>
+      <li>80% des femmes atteignent l’orgasme par la <strong>stimulation du clitoris</strong>, et non par la pénétration seule.</li>
+      <li>La communication, la douceur, la confiance et l’attention sont les facteurs les plus cités pour un bon rapport sexuel.</li>
+      <li>Beaucoup de femmes déclarent préférer des pénis de taille "moyenne", jugés plus confortables et adaptés.</li>
+      <li>Le plaisir est une <strong>expérience globale</strong> : taille ≠ performance.</li>
+    </ul>
+  </div>
+
+  <div class="diplome" id="diplome" style="display: none;"></div>
+
+  <script>
+    function calculateVolume() {
+      const prenom = document.getElementById("prenom").value.trim();
+      const length = parseFloat(document.getElementById("length").value);
+      const girth = parseFloat(document.getElementById("girth").value);
+
+      if (!prenom || isNaN(length) || isNaN(girth) || length <= 0 || girth <= 0) {
+        document.getElementById("result").innerText = "Veuillez entrer toutes les informations correctement.";
+        document.getElementById("diplome").style.display = "none";
+        document.getElementById("echelle").style.display = "none";
+        return;
+      }
+
+      const radius = girth / (2 * Math.PI);
+      const volume = Math.PI * Math.pow(radius, 2) * length;
+
+      const moyenne = 165;
+      let score = 5 + (volume - moyenne) / 25;
+      score = Math.min(7, Math.max(1, Math.round(score)));
+
+      document.getElementById("result").innerHTML =
+        `<strong>📐 Volume estimé :</strong> ${volume.toFixed(2)} cm³<br>` +
+        `<strong>🔢 Échelle :</strong> ${score} / 7`;
+
+      document.getElementById("echelle").style.display = "block";
+
+      document.getElementById("diplome").style.display = "block";
+      document.getElementById("diplome").innerHTML =
+        `🎓 <strong>Félicitations ${prenom} !</strong><br>` +
+        `Tu possèdes une anatomie suffisante pour satisfaire, donner du plaisir et vivre une sexualité épanouie.<br>` +
+        `Souviens-toi que le plus grand atout, c’est l’attention, la tendresse et la confiance.<br>` +
+        `<em>Ton corps est unique, et il est déjà très bien comme il est.</em>`;
+    }
+  </script>
+</body>
+</html>
